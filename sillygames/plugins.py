@@ -28,7 +28,7 @@ class FSHandler(FileSystemEventHandler):
                 continue
             
             logger.debug("plugin %s is reloaded " % basename)
-            reload(plugin)
+            self.plugins[basename] = reload(plugin)
             break
 
 class PluginLoader():

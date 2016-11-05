@@ -6,37 +6,28 @@ import speech_recognition as sr
 import asyncio
 import glob, os
 import logging
+import asyncio
     
 available_commands=[]
 command_activate = "Google"
 logger = logging.getLogger()
 running_callback = None
 
-def hear(robot, commands):
+async def hear(robot, commands, commander):
     logger.debug("listening...")
-    recognized = sillygames.recognize()
-    if recognized == None:
-        logger.debug("Not recognized")
+    recognized = await commander.get()
+    
+    command = commands.get(recognized)
+    
+    if command == None:
+        await robot.say_text("What?").wait_for_completed()
         return
+    await command(robot, commander, recognized)
 
-    print("You said: " + recognized)
-    if command_activate in recognized or command_activate.lower() in recognized:
-        logger.debug("Action command recognized")
-        command_phrase = recognized[len(command_activate):].strip().lower()
-        command = commands.get(command_phrase)
 
-        if command == None:
-            robot.say_text("What?").wait_for_completed()
-            return
-        command(robot, command_phrase)
-        
-    else:
-        robot.say_text("You did not say the magic word " + command_activate).wait_for_completed()
-        logger.debug("You did not say the magic word " + command_activate)
-
-def run(sdk_conn):
+async def run(sdk_conn):
     '''The run method runs once the Cozmo SDK is connected.'''
-    robot = sdk_conn.wait_for_robot()
+    robot = await sdk_conn.wait_for_robot()
     commands = {}
     global available_commands
     
@@ -50,13 +41,11 @@ def run(sdk_conn):
     if callable(running_callback):
         running_callback()
     try:
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source)
-            sillygames.setAudioSourceAndRecognizer(source, r)
-            while 1:
-                print("say something")
-                hear(robot, commands)
+        commander = sillygames.SpeechCommandsChannel(command_activate)
+        commander.start()
+        while 1:
+            print("say something")
+            await hear(robot, commands, commander)
 
     except KeyboardInterrupt:
         print("")
