@@ -12,10 +12,6 @@ command_activate = "Google"
 logger = logging.getLogger()
 running_callback = None
 
-def load_plugin(name):
-    mod = __import__(name)
-    return mod
-    
 def hear(robot, commands):
     logger.debug("listening...")
     recognized = sillygames.recognize()
@@ -44,9 +40,9 @@ def run(sdk_conn):
     commands = {}
     global available_commands
     
-    plugins = sillygames.plugins.loadPlugins(".", "games")
-    print(plugins)
-    for plugin in plugins:
+    plugins = sillygames.plugins.PluginLoader(".", "games")
+    plugins.load()
+    for plugin in plugins.plugins.values():
         info = plugin.info()
         commands[info["activation"].lower()] = plugin.main
         available_commands.append(info)
