@@ -1,5 +1,5 @@
 import cozmo
-import sillygames
+import sillygames, sillygames.plugins
 import time
 import sys
 import speech_recognition as sr
@@ -44,10 +44,9 @@ def run(sdk_conn):
     commands = {}
     global available_commands
     
-    # os.chdir("games")
-    for fileName in glob.glob("game_*.py"):
-        pluginName = fileName.rsplit( ".", 1 )[ 0 ]
-        plugin = load_plugin(pluginName)
+    plugins = sillygames.plugins.loadPlugins(".", "games")
+    print(plugins)
+    for plugin in plugins:
         info = plugin.info()
         commands[info["activation"].lower()] = plugin.main
         available_commands.append(info)

@@ -6,6 +6,7 @@ import cozmo
 import random
 import math
 import sillygames
+import os
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -19,7 +20,7 @@ def calc(a, sign, b):
     if sign == "/":
         return math.floor(a / b)
 
-def generateImage(text, font="font.ttf", fontSize=100, imageSize=(300, 100)):
+def generateImage(text, font=os.path.join(os.path.dirname(__file__), "font.ttf"), fontSize=100, imageSize=(300, 100)):
     image = Image.new('RGBA', imageSize, (255, 255, 255, 255))
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(font, fontSize)
@@ -78,4 +79,3 @@ def main(robot, phrase):
 
 def info():
     return {"activation": "play", "name": "Math", "description": "Basic arithmetic"}
-
