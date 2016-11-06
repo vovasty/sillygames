@@ -40,7 +40,7 @@ async def run(sdk_conn):
     commands = {}
     global available_commands
     
-    plugins = sillygames.plugins.PluginLoader(".", "games")
+    plugins = sillygames.plugins.PluginLoader(os.path.join(os.path.dirname(__file__), 'games'), "sillygames.games")
     plugins.load()
     for plugin in plugins.plugins.values():
         info = plugin.info()
