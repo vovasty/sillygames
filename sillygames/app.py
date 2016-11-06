@@ -27,7 +27,7 @@ async def hear(robot, commands, commander):
     commandKey = recognized[len(commandWord):].strip().lower()
     command = commands.get(commandKey)
     
-    if command == None:
+    if command is None:
         await robot.say_text("What?").wait_for_completed()
         return
 

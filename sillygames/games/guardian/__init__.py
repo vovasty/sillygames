@@ -273,4 +273,4 @@ async def main(robot, commander, recognized):
 
 
 def info():
-    return {"activation": "go", "name": "Guardian", "description": "Guards your table!<br/>Say <i>stop</i> to escape safety"}
+    return {"activation": "defend me", "name": "Guardian", "description": "Guards your table!<br/>Say <i>stop</i> to escape safety"}
