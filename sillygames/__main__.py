@@ -1,2 +1,3 @@
-from sillygames.app import main
-main()
+import sillygames.main
+
+sillygames.main.main()

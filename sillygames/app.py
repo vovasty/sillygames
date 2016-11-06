@@ -20,7 +20,7 @@ async def hear(robot, commands, commander):
     if commandWord.lower() in recognized.lower():
         logger.debug("Action command recognized")
     else:
-        await robot.say_text("You did not say the magic word " + command_activate).wait_for_completed()
+        await robot.say_text("You did not say the magic word " + commandWord).wait_for_completed()
         logger.debug("No magic word!")
         return
     

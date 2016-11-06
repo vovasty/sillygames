@@ -9,13 +9,10 @@ import sillygames.app
 from flask import jsonify
 
 async_mode = None
-# set the project root directory as the static folder, you can set others.
 app = Flask(__name__, static_url_path='')
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
-# app._static_folder='.'
-
 
 class SocketIOHandler(logging.Handler):
     """
@@ -87,13 +84,12 @@ logger.addHandler(sh)
 logger.addHandler(ch)
 
 def app_thread():
-    """Example of how to send server generated events to clients."""
-    socketio.emit('status', {'running': False}, broadcast=True)
+    socketio.emit('status', {'running': False})
     try:
-        sillygames.app.main(callback=lambda: socketio.emit('status', {'running': True}, broadcast=True))
-        socketio.emit('status', {'running': False, 'error': 'not running'}, broadcast=True)
+        sillygames.app.main(callback=lambda: socketio.emit('status', {'running': True}))
+        socketio.emit('status', {'running': False, 'error': 'not running'})
     except Exception as e:
-        socketio.emit('status', {'running': False, 'error': str(e)}, broadcast=True)
+        socketio.emit('status', {'running': False, 'error': str(e)})
         logger.error(e)
     finally:
         global thread
@@ -107,7 +103,7 @@ def connect():
 @socketio.on('disconnect')
 def disconnect():
     print('Client disconnected', request.sid)
-    
+
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
@@ -128,6 +124,7 @@ def status():
 def commands():
     return jsonify(sillygames.app.availableCommands())
     
-
-if __name__ == "__main__":
-    socketio.run(app, host='127.0.0.1', port=5000, debug=True)
+def main():
+    global thread
+    thread = socketio.start_background_task(target=app_thread)
+    socketio.run(app, host='127.0.0.1', port=5000)

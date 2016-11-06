@@ -34,6 +34,8 @@ class DeskSecurityGuard:
 
     def __init__(self):
         self.is_armed = True
+        
+        self.owner_name = "owner_name"
 
         self.time_first_observed_intruder = None
         self.time_last_observed_intruder = None
@@ -128,24 +130,8 @@ async def check_for_intruder(robot, dsg:DeskSecurityGuard):
             # Definitely an intruder - turn backpack red to indicate
             robot.set_all_backpack_lights(cozmo.lights.red_light)
 
-            # Tweet a photo (every X seconds)
-            if not did_occur_recently(dsg.time_last_uploaded_photo, 15.0):
-                # Tweet the image to the owner
-                latest_image = robot.world.latest_image
-                if latest_image is not None:
-                    # status_text = "@" + dsg.owner_username + " Intruder Detected"
-                    # media_ids = twitter_helpers.upload_images(dsg.twitter_api, [latest_image.raw_image])
-                    # posted_image = twitter_helpers.post_tweet(dsg.twitter_api, status_text, media_ids=media_ids)
-                    # if posted_image:
-                        dsg.time_last_uploaded_photo = time.time()
-                    # else:
-                    #     print("Failed to tweet photo of intruder!")
-                else:
-                    print("No camera image available to tweet!")
-
             # Sound an alarm (every X seconds)
             if not did_occur_recently(dsg.time_last_announced_intruder, 10):
-                await robot.say_text("Intruder Alert").wait_for_completed()
                 dsg.time_last_announced_intruder = time.time()
 
             # Pounce at intruder (every X seconds)
@@ -287,4 +273,4 @@ async def main(robot, commander, recognized):
 
 
 def info():
-    return {"activation": "go", "name": "Guardian", "description": "Guards your table!"}
+    return {"activation": "go", "name": "Guardian", "description": "Guards your table!<br/>Say <i>stop</i> to escape safety"}

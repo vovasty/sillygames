@@ -72,7 +72,7 @@ async def main(robot, commander, phrase):
             continue
 
         if yourAnswer == myAnswer:
-            await robot.say_text("You win!", play_excited_animation=True).wait_for_completed()
+            await robot.say_text("Correct!", play_excited_animation=True).wait_for_completed()
         else:
             await robot.say_text(yourAnswer + " is not right!").wait_for_completed()
         
