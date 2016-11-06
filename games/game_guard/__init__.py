@@ -205,7 +205,7 @@ async def main(robot, commander, recognized):
         command = commander.get_nowait()
         while not command is None:
             command = command.lower()
-            if command == "stock":
+            if command == "stop":
                 await robot.say_text("You are unsafe.").wait_for_completed()
                 return
             

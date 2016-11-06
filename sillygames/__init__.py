@@ -7,9 +7,8 @@ logger = logging.getLogger()
 
 class SpeechCommandsChannel():
     
-    def __init__(self, commandWord):
+    def __init__(self):
         self.stop_listening = None
-        self.commandWord = commandWord.lower()
         self.queue = asyncio.PriorityQueue()
 
     def start(self):
@@ -47,16 +46,7 @@ class SpeechCommandsChannel():
             recognized = recognizer.recognize_google(audio)
             logger.debug("recognized: " + recognized)
             
-            if self.commandWord in recognized.lower():
-                logger.debug("Action command recognized")
-                command = recognized[len(self.commandWord):].strip().lower()
-                
-                self.queue.put_nowait(command)        
-            else:
-                # await robot.say_text("You did not say the magic word " + command_activate).wait_for_completed()
-                logger.debug("No magic word")
-
-
+            self.queue.put_nowait(recognized)        
         except sr.UnknownValueError:
             logger.error("Google Speech Recognition could not understand audio")
             return None

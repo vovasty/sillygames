@@ -9,19 +9,28 @@ import logging
 import asyncio
     
 available_commands=[]
-command_activate = "Google"
+commandWord = "Google"
 logger = logging.getLogger()
 running_callback = None
 
 async def hear(robot, commands, commander):
     logger.debug("listening...")
     recognized = await commander.get()
+
+    if commandWord.lower() in recognized.lower():
+        logger.debug("Action command recognized")
+    else:
+        await robot.say_text("You did not say the magic word " + command_activate).wait_for_completed()
+        logger.debug("No magic word!")
+        return
     
-    command = commands.get(recognized)
+    commandKey = recognized[len(commandWord):].strip().lower()
+    command = commands.get(commandKey)
     
     if command == None:
         await robot.say_text("What?").wait_for_completed()
         return
+
     await command(robot, commander, recognized)
 
 
@@ -41,7 +50,7 @@ async def run(sdk_conn):
     if callable(running_callback):
         running_callback()
     try:
-        commander = sillygames.SpeechCommandsChannel(command_activate)
+        commander = sillygames.SpeechCommandsChannel()
         commander.start()
         while 1:
             print("say something")
