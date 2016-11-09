@@ -9,7 +9,7 @@ Tested only on macOS!
 ```shell
 brew install portaudio
 ```
-3. insttall sillygames
+3. install sillygames
 ```
 pip install git+https://github.com/vovasty/sillygames
 ```
