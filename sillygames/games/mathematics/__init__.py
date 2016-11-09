@@ -79,4 +79,4 @@ async def main(robot, commander, phrase):
         return
 
 def info():
-    return {"activation": "play", "name": "Math", "description": "Basic arithmetic"}
+    return {"activation": "play numbers", "name": "Math", "description": "Basic arithmetic"}
