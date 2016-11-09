@@ -16,3 +16,4 @@ pip install git+https://github.com/vovasty/sillygames
 
 ##Usage
 run command `sillygames` from the Terminal application.
+open url `http://localhost:5000` from your browser.
