@@ -17,3 +17,6 @@ pip install git+https://github.com/vovasty/sillygames
 ##Usage
 * run command `sillygames` from the Terminal application.
 * open [http://localhost:5000](http://localhost:5000) in your browser.
+
+
+Please note: Cozmo does not have built-in microphone, so you should talk with your computer ;)
