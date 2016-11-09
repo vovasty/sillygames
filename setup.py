@@ -14,7 +14,7 @@ setup(name='sillygames',
                   'sillygames = sillygames.main:main',
               ]
           },
-      
+      include_package_data = True,
       install_requires=[
           "SpeechRecognition",
           "Flask",
